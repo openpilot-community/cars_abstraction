@@ -16,7 +16,7 @@ module Cars
     end
 
     def retrieve_action
-      'ajax_refresh_buckets'
+      # 'ajax_refresh_buckets'
     end
 
     def parse(page)
