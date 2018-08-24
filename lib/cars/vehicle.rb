@@ -38,7 +38,7 @@ module Cars
           }
           style_keys = []
           section.search('#labels-row > .cell').reverse.drop(1).reverse.each do |key|
-            style_keys << key.text.parameterize('_').gsub('style','name')
+            style_keys << key.text.parameterize(separator: '_').gsub('style','name')
           end
           new_trim[:styles] = []
           section.search('.trim-details > .trim-card').each do |trim_style_card|
@@ -48,44 +48,13 @@ module Cars
             style_keys.each_with_index do |item, index|
               new_style[:"#{item}"] = trim_cells[index].text.squish
             end
-            new_style[:link] = "#{Cars.config['base_url'].gsub('/research','')}#{link}"
+            new_style[:link] = "#{ENV['VEHICLE_ROOT_URL'].gsub('/research','')}#{link}"
             new_trim[:styles] << new_style
           end
           values[:trims] << new_trim
         end
       end
       values
-    end
-
-    def fix_markdown(html)
-      ReverseMarkdown.convert(html, tag_border: '').gsub('&nbsp;', ' ')
-    end
-
-    def fix_html(html)
-      html_cleaned = Sanitize.fragment(html, Sanitize::Config.merge(Sanitize::Config::BASIC,
-                                                                    elements: Sanitize::Config::BASIC[:elements] - %w[p br],
-                                                                    attributes: { 'a' => %w[href title],
-                                                                                  'span' => ['class'] },
-                                                                    whitespace_elements: {
-                                                                      'br' => { before: '', after: '\n' },
-                                                                      'div' => { before: '', after: '' },
-                                                                      'p'   => { before: '', after: '' }
-                                                                    }))
-      # html_cleaned = html_stripped.gsub(/\ +/, ' ')
-      # html_cleaned = html_cleaned.gsub(/\n\ +/, '')
-      # html_stripped = html_stripped.gsub(/\n/, '<br />')
-      html_cleaned = simple_format(html_cleaned, {}, wrapper_tag: 'p', sanitize: false)
-
-      # html_clean = html_stripped.gsub(/<p><br><\/p>/, '<br />')
-      #
-      # html_clean = html_clean.gsub('<br /><br />', '<br />')
-      #
-      # html_clean = html_clean.gsub('<br>', '<br />')
-      # html_clean = html_clean.gsub(/\<br \/\>\n\<br \/>\n/, '<br />')
-      # html_clean = html_clean.gsub(/\<\/p\>\n\<br \/\>/, '</p>')
-      # html_clean = html_clean.gsub(/\<br \/\>\<\/p\>/, '</p>')
-      # pp html_cleaned
-      html_cleaned
     end
   end
 end

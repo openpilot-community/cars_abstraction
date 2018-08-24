@@ -11,7 +11,7 @@ module Cars
     attr_accessor :conn
 
     def initialize(conn = nil)
-      @base_url = Cars.config['base_url']
+      @base_url = ENV["VEHICLE_ROOT_URL"]
       # @username = Cars.config['username']
       # @password = Cars.config['password']
 
@@ -21,7 +21,7 @@ module Cars
     end
 
     def self.base_url
-      Cars.config['base_url']
+      ENV["VEHICLE_ROOT_URL"]
     end
 
     def self.active_client
