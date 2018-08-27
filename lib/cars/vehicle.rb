@@ -27,7 +27,12 @@ module Cars
       values = {}
       trim_sections = vehicle_page.search('.cui-accordion-section')
       values[:name] = ""
-      values[:image] = "#{Cars.config['base_url'].gsub('/research','')}#{vehicle_page.search('.trim_listing__image img').first.attributes['src']}"
+      trim_image = vehicle_page.search('.trim_listing__image img').first
+      if trim_image.present?
+        values[:image] = "#{Cars.config['base_url'].gsub('/research','')}#{trim_image.attributes['src']}"
+      else
+        values[:image] = nil
+      end
       values[:trims] = []
       trim_sections.each do |section|
         if section.search('.cui-accordion-section__title').first
