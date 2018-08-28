@@ -29,7 +29,7 @@ module Cars
       values[:name] = ""
       trim_image = vehicle_page.search('.trim_listing__image img').first
       if trim_image.present?
-        values[:image] = "#{Cars.config['base_url'].gsub('/research','')}#{trim_image.attributes['src']}"
+        values[:image] = "#{ENV['VEHICLE_ROOT_URL'].gsub('/research','')}#{trim_image.attributes['src']}"
       else
         values[:image] = nil
       end
